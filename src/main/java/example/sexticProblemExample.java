@@ -78,6 +78,9 @@ public class sexticProblemExample {
         double[] bestArray = new double[runs]; //Array for statistics
         int i, best; //Additional helping variables
 
+        /**
+         * Runs of the algorithm with statistical analysis
+         */
         for (int k = 0; k < runs; k++) {
 
             best = 0;
@@ -89,13 +92,13 @@ public class sexticProblemExample {
             de.run();
 
             bestArray[k] = de.getBest().fitness - tf.optimum();
-            System.out.println(de.getBest().fitness - tf.optimum());
-            
+
             /**
-             * Final AP equation.
+             * AP best result value and equation.
              */
 
             System.out.println("=================================");
+            System.out.println("Best obtained fitness function value: \n" + (de.getBest().fitness - tf.optimum()));
             System.out.println("Equation: \n" + ((AP_DErand1bin.AP_Individual) de.getBest()).equation);
             System.out.println("Vector: \n" + Arrays.toString(((AP_DErand1bin.AP_Individual) de.getBest()).vector));
             System.out.println("=================================");
@@ -112,6 +115,9 @@ public class sexticProblemExample {
                 }
             }
             System.out.println("Best solution found in " + best + " CFE");
+            
+            System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+            
             
         }
 
