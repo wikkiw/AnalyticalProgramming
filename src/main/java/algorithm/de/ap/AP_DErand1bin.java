@@ -2,16 +2,10 @@ package algorithm.de.ap;
 
 import algorithm.Algorithm;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.DoubleStream;
 import model.Individual;
 import model.tf.TestFunction;
-import model.tf.ap.regression.AP4sine;
 import model.tf.ap.APtf;
-import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
-import org.apache.commons.math3.stat.descriptive.rank.Median;
 import util.random.Random;
 
 /**
