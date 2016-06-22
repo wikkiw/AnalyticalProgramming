@@ -3,7 +3,7 @@ package AP.algorithm.de.ap;
 import AP.algorithm.Algorithm;
 import java.util.ArrayList;
 import java.util.List;
-import AP.model.Individual;
+import AP.model.AP_Individual;
 import AP.model.tf.TestFunction;
 import AP.model.tf.ap.APtf;
 import AP.util.random.Random;
@@ -15,12 +15,6 @@ import AP.util.random.Random;
  * @author wiki 03/11/2015
  */
 public class AP_DErand1bin implements Algorithm {
-
-    public class AP_Individual extends Individual{
-        
-        public String equation;
- 
-    }
 
     int D;
     int G;
@@ -60,7 +54,8 @@ public class AP_DErand1bin implements Algorithm {
         }
 
         List<AP_Individual> newPop;
-        AP_Individual x, trial;
+        AP_Individual x;
+        AP_Individual trial;
         double[] u, v;
         AP_Individual[] parrentArray;
 
@@ -143,7 +138,7 @@ public class AP_DErand1bin implements Algorithm {
 
     }
 
-    protected void constrain(Individual individual){
+    protected void constrain(AP_Individual individual){
         
         tf.constrain(individual);
         
@@ -155,7 +150,7 @@ public class AP_DErand1bin implements Algorithm {
      * @param F
      * @return
      */
-    protected double[] mutation(Individual[] parentArray, double F) {
+    protected double[] mutation(AP_Individual[] parentArray, double F) {
 
         double[] u = new double[D];
         double[] a = parentArray[1].vector;
@@ -295,7 +290,7 @@ public class AP_DErand1bin implements Algorithm {
     }
 
     @Override
-    public List<? extends Individual> getPopulation() {
+    public List<? extends AP_Individual> getPopulation() {
         return P;
     }
 

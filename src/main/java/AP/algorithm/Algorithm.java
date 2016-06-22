@@ -1,6 +1,6 @@
 package AP.algorithm;
 
-import AP.model.Individual;
+import AP.model.AP_Individual;
 import AP.model.tf.TestFunction;
 
 import java.util.List;
@@ -10,15 +10,15 @@ import java.util.List;
  */
 public interface Algorithm {
 
-    Individual run();
+    AP_Individual run();
 
-    List<? extends Individual> getPopulation();
+    List<? extends AP_Individual> getPopulation();
 
     TestFunction getTestFunction();
 
-    default Individual getBest() {
-        Individual best = getPopulation().get(0);
-        for (Individual individual : getPopulation()) {
+    default AP_Individual getBest() {
+        AP_Individual best = getPopulation().get(0);
+        for (AP_Individual individual : getPopulation()) {
             if (individual.fitness < best.fitness) best = individual;
         }
         return best;

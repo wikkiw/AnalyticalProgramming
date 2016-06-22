@@ -1,5 +1,6 @@
 package AP.algorithm.de.ap;
 
+import AP.model.AP_Individual;
 import java.util.ArrayList;
 import java.util.List;
 import AP.model.tf.TestFunction;
@@ -13,6 +14,8 @@ import AP.util.random.Random;
  */
 public class AP_DEbest extends AP_DErand1bin {
     
+    protected List<AP_Individual> initial_population;
+    
     /**
      * 
      * @param D
@@ -22,9 +25,47 @@ public class AP_DEbest extends AP_DErand1bin {
      * @param rndGenerator
      * @param F
      * @param CR 
+     * @param initPop 
      */
-    public AP_DEbest(int D, int NP, int MAXFES, TestFunction f, Random rndGenerator, double F, double CR) {
+    public AP_DEbest(int D, int NP, int MAXFES, TestFunction f, Random rndGenerator, double F, double CR, List<AP_Individual> initPop) {
         super(D, NP, MAXFES, f, rndGenerator, F, CR);
+        
+        this.initial_population = initPop;
+    }
+    
+    /**
+     *
+     */
+    @Override
+    protected void initializePopulation() {
+
+        P = new ArrayList<>();
+        double[] vector;
+        int initPopSize, popIt = 0;
+        
+        if(this.initial_population == null){
+            initPopSize = 0;
+        } else {
+            initPopSize = this.initial_population.size();
+        }
+
+
+        for (int i = 0; i < NP; i++) {
+
+            if (checkFES()) {
+                return;
+            }
+            
+            if(popIt < initPopSize) {
+                vector = this.initial_population.get(popIt).vector.clone();
+                popIt++;
+            } else {
+                vector = tf.generateTrial(D);
+            }
+            P.add(makeIndividualFromVector(vector));
+
+        }
+
     }
     
     /**

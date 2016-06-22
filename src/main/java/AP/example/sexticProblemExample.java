@@ -3,6 +3,7 @@ package AP.example;
 import AP.algorithm.Algorithm;
 import AP.algorithm.de.ap.AP_DEbest;
 import AP.algorithm.de.ap.AP_ShaDE;
+import AP.model.AP_Individual;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
@@ -88,7 +89,7 @@ public class sexticProblemExample {
             i = 0;
             min = Double.MAX_VALUE;
             
-            de = new AP_DEbest(dimension, NP, MAXFES, tf, generator, f, cr);
+            de = new AP_DEbest(dimension, NP, MAXFES, tf, generator, f, cr, null);
 
             de.run();
 
@@ -100,11 +101,11 @@ public class sexticProblemExample {
 
             System.out.println("=================================");
             System.out.println("Best obtained fitness function value: \n" + (de.getBest().fitness - tf.optimum()));
-            System.out.println("Equation: \n" + ((AP_DEbest.AP_Individual) de.getBest()).equation);
-            System.out.println("Vector: \n" + Arrays.toString(((AP_DEbest.AP_Individual) de.getBest()).vector));
+            System.out.println("Equation: \n" + ((AP_Individual) de.getBest()).equation);
+            System.out.println("Vector: \n" + Arrays.toString(((AP_Individual) de.getBest()).vector));
             System.out.println("=================================");
             
-            for(AP_DEbest.AP_Individual ind : ((AP_DEbest)de).getBestHistory()){
+            for(AP_Individual ind : ((AP_DEbest)de).getBestHistory()){
                 i++;
                 if(ind.fitness < min){
                     min = ind.fitness;
@@ -192,7 +193,7 @@ public class sexticProblemExample {
             i = 0;
             min = Double.MAX_VALUE;
             
-            de = new AP_ShaDE(dimension, MAXFES, tf, H, NP, generator);
+            de = new AP_ShaDE(dimension, NP, MAXFES, tf, generator, H);
 
             de.run();
 
@@ -204,11 +205,11 @@ public class sexticProblemExample {
 
             System.out.println("=================================");
             System.out.println("Best obtained fitness function value: \n" + (de.getBest().fitness - tf.optimum()));
-            System.out.println("Equation: \n" + ((AP_ShaDE.AP_Individual) de.getBest()).equation);
-            System.out.println("Vector: \n" + Arrays.toString(((AP_ShaDE.AP_Individual) de.getBest()).vector));
+            System.out.println("Equation: \n" + ((AP_Individual) de.getBest()).equation);
+            System.out.println("Vector: \n" + Arrays.toString(((AP_Individual) de.getBest()).vector));
             System.out.println("=================================");
             
-            for(AP_ShaDE.AP_Individual ind : ((AP_ShaDE)de).getBestHistory()){
+            for(AP_Individual ind : ((AP_ShaDE)de).getBestHistory()){
                 i++;
                 if(ind.fitness < min){
                     min = ind.fitness;

@@ -1,7 +1,7 @@
 package AP.model.tf.ap;
 
 import java.util.ArrayList;
-import AP.model.Individual;
+import AP.model.AP_Individual;
 import AP.model.ap.APconst;
 import AP.model.tf.TestFunction;
 
@@ -27,7 +27,7 @@ public class APtf implements TestFunction {
     }
     
     @Override
-    public double fitness(Individual individual) {
+    public double fitness(AP_Individual individual) {
         return this.fitness(individual.vector);
     }
 
@@ -43,7 +43,7 @@ public class APtf implements TestFunction {
     }
     
     @Override
-    public void constrain(Individual individual) {
+    public void constrain(AP_Individual individual) {
         for (int i = 0; i < individual.vector.length; i++) {
 
             if (individual.vector[i] > this.max(individual.vector.length)) {

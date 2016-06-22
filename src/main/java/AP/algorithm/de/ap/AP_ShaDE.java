@@ -3,7 +3,7 @@ package AP.algorithm.de.ap;
 import AP.algorithm.Algorithm;
 import java.util.ArrayList;
 import java.util.List;
-import AP.model.Individual;
+import AP.model.AP_Individual;
 import AP.model.tf.TestFunction;
 import AP.model.tf.ap.APtf;
 import AP.util.OtherDistributionsUtil;
@@ -36,19 +36,8 @@ public class AP_ShaDE implements Algorithm {
     AP.util.random.Random rndGenerator;
     int id;
     List<Double> avgGenerationLength;
-
-    public class AP_Individual extends Individual{
-        
-        public String equation;
-        public int length;
-
-        private AP_Individual(String valueOf, double[] u, double fitness) {
-            super(valueOf, u, fitness);
-        }
- 
-    }
     
-    public AP_ShaDE(int D, int MAXFES, TestFunction f, int H, int NP, AP.util.random.Random rndGenerator) {
+    public AP_ShaDE(int D, int NP, int MAXFES, TestFunction f, AP.util.random.Random rndGenerator, int H) {
         this.D = D;
         this.MAXFES = MAXFES;
         this.f = f;
@@ -366,7 +355,7 @@ public class AP_ShaDE implements Algorithm {
     }
     
     @Override
-    public List<? extends Individual> getPopulation() {
+    public List<? extends AP_Individual> getPopulation() {
         return this.P;
     }
 
@@ -586,7 +575,7 @@ public class AP_ShaDE implements Algorithm {
         this.f = f;
     }
 
-    public Individual getBest() {
+    public AP_Individual getBest() {
         return best;
     }
 

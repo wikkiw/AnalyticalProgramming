@@ -1,6 +1,6 @@
 package AP.model.tf;
 
-import AP.model.Individual;
+import AP.model.AP_Individual;
 
 /**
  * Basic interface for test functions.
@@ -9,7 +9,7 @@ import AP.model.Individual;
  */
 public interface TestFunction {
 
-    double fitness(Individual individual);
+    double fitness(AP_Individual individual);
 
     /**
      * Convenience override for fitness(Individiual individual)
@@ -19,7 +19,7 @@ public interface TestFunction {
      */
     double fitness(double[] vector);
 
-    void constrain(Individual individual);
+    void constrain(AP_Individual individual);
 
     double[] generateTrial(int dim);
 
