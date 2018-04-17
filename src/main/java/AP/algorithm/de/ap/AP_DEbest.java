@@ -121,7 +121,7 @@ public class AP_DEbest extends AP_DErand1bin {
     protected int getBestIndividualInPopulation() {
 
         double fitness = Double.MAX_VALUE;
-        int index = -1;
+        int index = 0;
         int i = 0;
 
         for (AP_Individual ind : P) {

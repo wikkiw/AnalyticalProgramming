@@ -210,6 +210,10 @@ public class APconst {
                         }
                         tmp_result = cur_object.compute(array);
 
+                        if(Double.isNaN(tmp_result)){
+                            return Double.MAX_VALUE;
+                        }
+                        
                         queue.add(tmp_result);
                         strQueue.add(cur_object.createEq(strArray));
                         break;
@@ -218,6 +222,10 @@ public class APconst {
                         strArray.add(strQueue.remove());
                         tmp_result = cur_object.compute(array);
 
+                        if(Double.isNaN(tmp_result)){
+                            return Double.MAX_VALUE;
+                        }
+                        
                         queue.add(tmp_result);
                         strQueue.add(cur_object.createEq(strArray));
                         break;
@@ -228,6 +236,10 @@ public class APconst {
                         strArray.add(strQueue.remove());
                         tmp_result = cur_object.compute(array);
 
+                        if(Double.isNaN(tmp_result)){
+                            return Double.MAX_VALUE;
+                        }
+                        
                         queue.add(tmp_result); 
                         strQueue.add(cur_object.createEq(strArray));
                         break;
@@ -240,6 +252,10 @@ public class APconst {
                         strArray.add(strQueue.remove());
                         tmp_result = cur_object.compute(array);
 
+                        if(Double.isNaN(tmp_result)){
+                            return Double.MAX_VALUE;
+                        }
+                        
                         queue.add(tmp_result);
                         strQueue.add(cur_object.createEq(strArray));
                         break;
