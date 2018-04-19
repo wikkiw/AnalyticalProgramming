@@ -6,6 +6,7 @@ import AP.algorithm.de.ap.AP_DEbest;
 import AP.algorithm.de.ap.AP_DErand1bin;
 import AP.algorithm.de.ap.AP_LSHADE;
 import AP.algorithm.de.ap.AP_ShaDE;
+import AP.algorithm.de.ap.AP_jDE;
 import AP.algorithm.pso.ap.AP_HCLPSO;
 import static AP.example.EURUSDExample.eurusdDEbest;
 import static AP.example.EURUSDExample.eurusdDErand;
@@ -67,7 +68,8 @@ public class BitcoinExample {
         
         String dir = "F:\\_UTB\\Data\\roman_SWEVO_SI\\results\\";
         
-        for(int i=0;i<5/*datasets.length*/;i++) {
+ 
+        for(int i=1;i<5;i++) {
         
             String datasetName = "dataset_" + i;
             double[][] dataset = datasets[i].clone();
@@ -108,14 +110,191 @@ public class BitcoinExample {
 
             bitcoinHCLPSO(dir + datasetName + "\\HCLPSO\\", dataset);
         
+            
+            
+        }
+        
+        for(int i=0;i<5;i++) {
+        
+            String datasetName = "dataset_" + i;
+            double[][] dataset = datasets[i].clone();
+                       
+
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
+            System.out.println(datasetName);
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\njDE");
+            System.out.println(new Date());
+            System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+
+            bitcoinjDE(dir + datasetName + "\\jDE\\", dataset);
+        }
+        
+        for(int i=0;i<5;i++) {
+        
+            String datasetName = "dataset_" + i;
+            double[][] dataset = datasets[i].clone();
+                       
+
             System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\nCMAES");
             System.out.println(new Date());
             System.out.println("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
 
             bitcoinCMAES(dir + datasetName + "\\CMAES\\", dataset);
-            
         }
         
+        
+    }
+    
+    public static void bitcoinjDE(String dir, double[][] dataset) {
+
+        /**
+         * Settings of the evolutionary algorithm - Differential Evolution
+         */
+
+        Algorithm de;
+        int dimension = dim; //Length of an individual - when using functions in GFS with maximum number of required arguments max_arg = 2, 2/3 are designated for program, 1/3 for constant values - for 60 it is 40 and 20
+        int NP = 75; //Size of the population - number of competitive solutions
+        int generations = gen; //Stopping criterion - number of generations in evolution
+        //int MAXFES = generations * NP; //Number of fitness function evaluations
+        double f = 0.5, cr = 0.8; //Scaling factor f and crossover rate cr
+        AP.util.random.Random generator = new AP.util.random.UniformRandom(); //Random number generator
+
+        /**
+         * Symbolic regression part
+         * 
+         * Settings of the dataset which is regressed
+         * Example: Sextic problem
+         */
+
+        // 50 points from range <-1, 1>, another type of data providing is possible
+        double[][] dataset_points = dataset;
+        ArrayList<AP_object> GFS = new ArrayList<>();
+        GFS.add(new AP_Plus()); //Addition
+        GFS.add(new AP_Sub()); //Subtraction
+        GFS.add(new AP_Multiply()); //Mulitplication
+        GFS.add(new AP_Div()); //Divison
+        GFS.add(new AP_Abs());
+        GFS.add(new AP_Cos());
+        GFS.add(new AP_Cubic());
+        GFS.add(new AP_Exp());
+        GFS.add(new AP_Ln());
+        GFS.add(new AP_Log10());
+        GFS.add(new AP_Mod());
+        GFS.add(new AP_Quad());
+        GFS.add(new AP_Sin());
+        GFS.add(new AP_Sigmoid());
+        GFS.add(new AP_Sqrt());
+        GFS.add(new AP_Tan());
+        GFS.add(new AP_aTOb());
+        GFS.add(new AP_x1()); //Independent variable x1
+    //        GFS.add(new AP_Const_static()); //Constant object - value is evolved in the extension of the individuals
+        //More functions and terminals for GFS can be found or added to model.ap.objects
+
+        double const_min = -10; //Minimum value of constants
+        double const_max = 10; //Maximum value of constants
+
+        APtf tf = new APdataset(dataset_points, GFS, const_min, const_max); //Dataset constructor
+
+        /**
+         * Additional variables
+         */
+
+        int runs = run_count; //Number of runs of the regression
+
+        double min; //Helping variable for best individual in terms of fitness function value
+        double[] bestArray = new double[runs]; //Array for statistics
+        int i, best; //Additional helping variables
+
+        try {
+
+            PrintWriter eq_writer = new PrintWriter(dir + "equations.txt", "UTF-8");
+
+
+        /**
+         * Runs of the algorithm with statistical analysis
+         */
+        for (int k = 0; k < runs; k++) {
+
+            best = 0;
+            i = 0;
+            min = Double.MAX_VALUE;
+
+            de = new AP_jDE(dimension, NP, MAXFES, tf, generator);
+
+            de.run();
+
+            PrintWriter writer;
+
+            try {
+                writer = new PrintWriter(dir + tf.name() + "-jDE" + k + ".txt", "UTF-8");
+
+                writer.print("{");
+
+                for (int ii = 0; ii < ((AP_jDE)de).getBestHistory().size(); ii++) {
+
+                    writer.print(String.format(Locale.US, "%.10f", ((AP_jDE)de).getBestHistory().get(ii).fitness));
+
+                    if (ii != ((AP_jDE)de).getBestHistory().size() - 1) {
+                        writer.print(",");
+                    }
+
+                }
+
+                writer.print("}");
+
+                writer.close();
+
+            } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+                Logger.getLogger(AP_jDE.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            bestArray[k] = de.getBest().fitness - tf.optimum();
+
+            /**
+             * AP best result value and equation.
+             */
+
+            System.out.println("=================================");
+            System.out.println("Best obtained fitness function value: \n" + (de.getBest().fitness - tf.optimum()));
+            System.out.println("Equation: \n" + ((AP_Individual) de.getBest()).equation);
+            System.out.println("Vector: \n" + Arrays.toString(((AP_Individual) de.getBest()).vector));
+            System.out.println("=================================");
+
+            for(AP_Individual ind : ((AP_jDE)de).getBestHistory()){
+                i++;
+                if(ind.fitness < min){
+                    min = ind.fitness;
+                    best = i;
+                }
+                if(ind.fitness == 0){
+                    System.out.println("Solution found in " + i + " CFE");
+                    break;
+                }
+            }
+            System.out.println("Best solution found in " + best + " CFE");
+
+            System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+
+          eq_writer.println(((AP_Individual) de.getBest()).equation + ";");
+
+            }
+
+            eq_writer.close();
+
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(EURUSDExample.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("=================================");
+        System.out.println("Min: " + DoubleStream.of(bestArray).min().getAsDouble());
+        System.out.println("Max: " + DoubleStream.of(bestArray).max().getAsDouble());
+        System.out.println("Mean: " + new Mean().evaluate(bestArray));
+        System.out.println("Median: " + new Median().evaluate(bestArray));
+        System.out.println("Std. Dev.: " + new StandardDeviation().evaluate(bestArray));
+        System.out.println("=================================");
+
     }
     
     public static void bitcoinCMAES(String dir, double[][] dataset) {
